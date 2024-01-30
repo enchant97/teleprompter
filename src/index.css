@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .btn {
+    @apply bg-neutral-800 hover:bg-neutral-950 duration-200 text-neutral-200 px-3 py-2 rounded shadow;
+  }
+  .btn.primary {
+    @apply bg-blue-800 hover:bg-blue-950;
+  }
+  .form-control {
+    @apply flex flex-col gap-1;
+  }
+  .label-text {
+    @apply text-sm;
+  }
+  .input {
+    @apply border border-neutral-300 rounded px-3 py-2;
+  }
+}

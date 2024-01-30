@@ -12,14 +12,16 @@ export default function Setup() {
       }}
       class="flex flex-col gap-2"
     >
-      <label>
-        Script
+      <label class="form-control">
+        <span class="label-text">Script</span>
         <textarea
           onInput={(ev) => setSettings({ script: ev.currentTarget.value })}
+          class="input"
+          rows={10}
           required
         >{settings.script}</textarea>
       </label>
-      <button type="submit">Save</button>
+      <button class="btn primary" type="submit">Save</button>
     </form>
   )
 }
