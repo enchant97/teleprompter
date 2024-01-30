@@ -11,7 +11,7 @@ export default function View() {
   onMount(() => {
     let play = true;
     let currentScroll = 0;
-    let speed = 32;
+    let speed = settings.scrollInterval;
 
     function scroll() {
       if (play == true) {
@@ -19,13 +19,13 @@ export default function View() {
         if (scriptContainer.scrollTop === (scriptContainer.scrollHeight - scriptContainer.offsetHeight)) {
           play = false
         } else {
-          scriptContainer.scroll({ top: currentScroll + 1 });
+          scriptContainer.scroll({ top: currentScroll + settings.scrollAmount, behavior: "smooth" });
         }
       }
     }
 
     function keyDownTextField(ev: KeyboardEvent) {
-      if (ev.key === "`") {
+      if (ev.key === "s") {
         ev.preventDefault();
         play = !play;
         return false;
