@@ -22,6 +22,10 @@ function readSettings(): Settings {
   }
 }
 
+function clearSettings() {
+  localStorage.clear()
+}
+
 export default function createSettingsStore() {
   const [settings, setSettings] = createStore(readSettings())
   function load() {
@@ -30,5 +34,5 @@ export default function createSettingsStore() {
   function save() {
     writeSettings(settings)
   }
-  return [settings, setSettings, { load, save }] as const
+  return [settings, setSettings, { load, save, clear: clearSettings }] as const
 }

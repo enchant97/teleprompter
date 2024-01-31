@@ -1,8 +1,12 @@
 import createSettingsStore from "~/core/settings"
 
 export default function Setup() {
-  const [settings, setSettings, { save }] = createSettingsStore()
+  const [settings, setSettings, { save, clear, load }] = createSettingsStore()
 
+  const clearSettings = () => {
+    clear()
+    load()
+  }
 
   return (
     <form
@@ -49,6 +53,7 @@ export default function Setup() {
         >{settings.script}</textarea>
       </label>
       <button class="btn primary" type="submit">Save</button>
+      <button onClick={clearSettings} class="btn error" type="button">Clear</button>
     </form>
   )
 }
