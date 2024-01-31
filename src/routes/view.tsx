@@ -18,6 +18,12 @@ export default function View() {
 
   const scriptLines = () => settings.script.split("\n\n")
 
+  const scriptStyle = () => `
+    color: ${settings.textColor};
+    background-color: ${settings.backgroundColor};
+    font-size: ${settings.textSize}rem;
+  `
+
   onMount(() => {
     let play = true;
     let currentScroll = 0;
@@ -63,10 +69,11 @@ export default function View() {
   return (
     <div
       ref={(el) => scriptContainer = el}
-      class="text-5xl leading-relaxed py-32 px-2 overflow-y-scroll max-w-[50rem] mx-auto"
+      class="leading-relaxed py-32 overflow-y-scroll"
+      style={scriptStyle()}
     >
       <For each={scriptLines()}>
-        {line => <p class="mt-12">{line}</p>}
+        {line => <p class="mt-12 max-w-[50rem] mx-auto">{line}</p>}
       </For>
     </div>
   )

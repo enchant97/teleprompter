@@ -55,6 +55,42 @@ export default function Setup() {
         />
       </label>
       <label class="form-control">
+        <span class="label-text">Background Color</span>
+        <input
+          value={settings.backgroundColor}
+          onInput={(ev) => setSettings({ backgroundColor: ev.currentTarget.value })}
+          class="input-color"
+          type="color"
+          required
+        />
+      </label>
+      <label class="form-control">
+        <span class="label-text">Text Color</span>
+        <input
+          value={settings.textColor}
+          onInput={(ev) => setSettings({ textColor: ev.currentTarget.value })}
+          class="input-color"
+          type="color"
+          required
+        />
+      </label>
+      <label class="form-control">
+        <span class="label-text">Text Size</span>
+        <div class="flex gap-1 items-center">
+          <input
+            value={settings.textSize}
+            onInput={(ev) => setSettings({ textSize: Number.parseInt(ev.currentTarget.value) })}
+            class="input flex-1"
+            type="range"
+            min={1}
+            max={20}
+            step={1}
+            required
+          />
+          <span>{settings.textSize}rem</span>
+        </div>
+      </label>
+      <label class="form-control">
         <span class="label-text">Script</span>
         <textarea
           onInput={(ev) => setSettings({ script: ev.currentTarget.value })}

@@ -7,6 +7,9 @@ export type Settings = {
   scrollInterval: number
   scrollAmount: number
   advanceScrollAmount: number
+  backgroundColor: string
+  textColor: string
+  textSize: number
 }
 
 function writeSettings(settings: Settings) {
@@ -14,6 +17,9 @@ function writeSettings(settings: Settings) {
   localStorage.setItem(`${SETTINGS_PREFIX}scrollInterval`, `${settings.scrollInterval}`)
   localStorage.setItem(`${SETTINGS_PREFIX}scrollAmount`, `${settings.scrollAmount}`)
   localStorage.setItem(`${SETTINGS_PREFIX}advanceScrollAmount`, `${settings.advanceScrollAmount}`)
+  localStorage.setItem(`${SETTINGS_PREFIX}backgroundColor`, `${settings.backgroundColor}`)
+  localStorage.setItem(`${SETTINGS_PREFIX}textColor`, `${settings.textColor}`)
+  localStorage.setItem(`${SETTINGS_PREFIX}textSize`, `${settings.textSize}`)
 }
 
 function readSettings(): Settings {
@@ -22,6 +28,9 @@ function readSettings(): Settings {
     scrollInterval: Number.parseInt(localStorage.getItem(`${SETTINGS_PREFIX}scrollInterval`) || "32"),
     scrollAmount: Number.parseInt(localStorage.getItem(`${SETTINGS_PREFIX}scrollAmount`) || "1"),
     advanceScrollAmount: Number.parseInt(localStorage.getItem(`${SETTINGS_PREFIX}advanceScrollAmount`) || "100"),
+    backgroundColor: localStorage.getItem(`${SETTINGS_PREFIX}backgroundColor`) || "#ffffff",
+    textColor: localStorage.getItem(`${SETTINGS_PREFIX}textColor`) || "#000000",
+    textSize: Number.parseInt(localStorage.getItem(`${SETTINGS_PREFIX}textSize`) || "3"),
   }
 }
 
