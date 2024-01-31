@@ -1,5 +1,5 @@
 import { For, onCleanup, onMount } from "solid-js"
-import createSettingsStore from "../core/settings"
+import createSettingsStore from "~/core/settings"
 
 export default function View() {
   let scriptContainer: HTMLDivElement

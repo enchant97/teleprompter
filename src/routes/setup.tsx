@@ -1,4 +1,4 @@
-import createSettingsStore from "../core/settings"
+import createSettingsStore from "~/core/settings"
 
 export default function Setup() {
   const [settings, setSettings, { save }] = createSettingsStore()
