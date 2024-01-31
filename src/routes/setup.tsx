@@ -17,7 +17,7 @@ export default function Setup() {
       class="flex flex-col gap-2"
     >
       <label class="form-control">
-        <span class="label-text">Scroll Interval</span>
+        <span class="label-text">Auto Scroll Interval</span>
         <div class="flex gap-1 items-center">
           <input
             value={settings.scrollInterval}
@@ -33,10 +33,21 @@ export default function Setup() {
         </div>
       </label>
       <label class="form-control">
-        <span class="label-text">Scroll Amount</span>
+        <span class="label-text">Auto Scroll Amount</span>
         <input
           value={settings.scrollAmount}
           onInput={(ev) => setSettings({ scrollAmount: Number.parseInt(ev.currentTarget.value) })}
+          class="input"
+          type="number"
+          min={1}
+          required
+        />
+      </label>
+      <label class="form-control">
+        <span class="label-text">Advance Scroll Amount</span>
+        <input
+          value={settings.advanceScrollAmount}
+          onInput={(ev) => setSettings({ advanceScrollAmount: Number.parseInt(ev.currentTarget.value) })}
           class="input"
           type="number"
           min={1}

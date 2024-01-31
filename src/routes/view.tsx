@@ -1,6 +1,16 @@
 import { For, onCleanup, onMount } from "solid-js"
 import createSettingsStore from "~/core/settings"
 
+function smartScroll(element: HTMLElement, amount: number): { currentScroll: number, end: boolean } {
+  let currentScroll = element.scrollTop;
+  if (element.scrollTop === (element.scrollHeight - element.offsetHeight)) {
+    return { currentScroll, end: true }
+  } else {
+    element.scroll({ top: currentScroll + amount, behavior: "smooth" });
+    return { currentScroll, end: false }
+  }
+}
+
 export default function View() {
   let scriptContainer: HTMLDivElement
 
@@ -13,28 +23,36 @@ export default function View() {
     let currentScroll = 0;
     let speed = settings.scrollInterval;
 
-    function scroll() {
+    function autoScroll() {
       if (play == true) {
-        currentScroll = scriptContainer.scrollTop;
-        if (scriptContainer.scrollTop === (scriptContainer.scrollHeight - scriptContainer.offsetHeight)) {
-          play = false
-        } else {
-          scriptContainer.scroll({ top: currentScroll + settings.scrollAmount, behavior: "smooth" });
-        }
+        let { currentScroll: newScroll, end } = smartScroll(scriptContainer, settings.scrollAmount)
+        currentScroll = newScroll
+        play = !end
       }
     }
 
+    function advanceScroll() {
+      let { currentScroll: newScroll, end } = smartScroll(scriptContainer, settings.advanceScrollAmount)
+      currentScroll = newScroll
+      if (end) { play = false }
+    }
+
     function keyDownTextField(ev: KeyboardEvent) {
-      if (ev.key === "s") {
-        ev.preventDefault();
-        play = !play;
-        return false;
+      switch (ev.key) {
+        case "s":
+          ev.preventDefault()
+          play = !play
+          return false
+        case "a":
+          ev.preventDefault()
+          advanceScroll()
+          return false
       }
     }
 
     document.addEventListener("keydown", keyDownTextField, false)
 
-    let scroller = setInterval(scroll, speed);
+    let scroller = setInterval(autoScroll, speed);
 
     onCleanup(() => {
       document.removeEventListener("keydown", keyDownTextField, false)
