@@ -75,6 +75,8 @@ export default function View() {
       <For each={scriptLines()}>
         {line => <p class="mt-12 max-w-[50rem] mx-auto">{line}</p>}
       </For>
+      <hr class="mb-[100vh]" />
+      <button onClick={() => scriptContainer.scroll({ top: 0 })} class="btn w-full">To Top</button>
     </div>
   )
 }
