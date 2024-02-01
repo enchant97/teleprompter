@@ -69,7 +69,7 @@ export default function View() {
   return (
     <div
       ref={(el) => scriptContainer = el}
-      class="leading-relaxed py-32 overflow-y-scroll"
+      class="leading-relaxed py-32 px-4 overflow-y-scroll"
       style={scriptStyle()}
     >
       <For each={scriptLines()}>
