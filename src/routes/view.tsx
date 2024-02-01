@@ -1,4 +1,4 @@
-import { For, onCleanup, onMount } from "solid-js"
+import { For, Show, onCleanup, onMount } from "solid-js"
 import createSettingsStore from "~/core/settings"
 
 function smartScroll(element: HTMLElement, amount: number): { currentScroll: number, end: boolean } {
@@ -22,6 +22,10 @@ export default function View() {
     color: ${settings.textColor};
     background-color: ${settings.backgroundColor};
     font-size: ${settings.textSize}rem;
+  `
+
+  const overlayStyle = () => `
+    top: ${settings.overlayHeight}rem;
   `
 
   onMount(() => {
@@ -69,14 +73,17 @@ export default function View() {
   return (
     <div
       ref={(el) => scriptContainer = el}
-      class="leading-relaxed py-32 px-4 overflow-y-scroll"
+      class="leading-relaxed py-32 overflow-y-scroll"
       style={scriptStyle()}
     >
+      <Show when={settings.overlayHeight !== 0}>
+        <div class="fixed bg-[#0000009c] w-full h-[100vh]" style={overlayStyle()}></div>
+      </Show>
       <For each={scriptLines()}>
-        {line => <p class="mt-12 max-w-[50rem] mx-auto">{line}</p>}
+        {line => <p class="mt-12 mx-auto" style={`max-width:${settings.maxWidth}px`}>{line}</p>}
       </For>
       <hr class="mb-[100vh]" />
-      <button onClick={() => scriptContainer.scroll({ top: 0 })} class="btn w-full">To Top</button>
-    </div>
+      <button onClick={() => scriptContainer.scroll({ top: 0 })} class="btn w-full sticky z-10">To Top</button>
+    </div >
   )
 }

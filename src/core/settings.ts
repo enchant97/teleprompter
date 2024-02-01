@@ -10,6 +10,8 @@ export type Settings = {
   backgroundColor: string
   textColor: string
   textSize: number
+  maxWidth: number
+  overlayHeight: number
 }
 
 function writeSettings(settings: Settings) {
@@ -20,6 +22,8 @@ function writeSettings(settings: Settings) {
   localStorage.setItem(`${SETTINGS_PREFIX}backgroundColor`, `${settings.backgroundColor}`)
   localStorage.setItem(`${SETTINGS_PREFIX}textColor`, `${settings.textColor}`)
   localStorage.setItem(`${SETTINGS_PREFIX}textSize`, `${settings.textSize}`)
+  localStorage.setItem(`${SETTINGS_PREFIX}maxWidth`, `${settings.maxWidth}`)
+  localStorage.setItem(`${SETTINGS_PREFIX}overlayHeight`, `${settings.overlayHeight}`)
 }
 
 function readSettings(): Settings {
@@ -31,6 +35,8 @@ function readSettings(): Settings {
     backgroundColor: localStorage.getItem(`${SETTINGS_PREFIX}backgroundColor`) || "#ffffff",
     textColor: localStorage.getItem(`${SETTINGS_PREFIX}textColor`) || "#000000",
     textSize: Number.parseInt(localStorage.getItem(`${SETTINGS_PREFIX}textSize`) || "3"),
+    maxWidth: Number.parseInt(localStorage.getItem(`${SETTINGS_PREFIX}maxWidth`) || "800"),
+    overlayHeight: Number.parseInt(localStorage.getItem(`${SETTINGS_PREFIX}overlayHeight`) || "0"),
   }
 }
 

@@ -91,6 +91,38 @@ export default function Setup() {
         </div>
       </label>
       <label class="form-control">
+        <span class="label-text">Max Width</span>
+        <div class="flex gap-1 items-center">
+          <input
+            value={settings.maxWidth}
+            onInput={(ev) => setSettings({ maxWidth: Number.parseInt(ev.currentTarget.value) })}
+            class="input flex-1"
+            type="number"
+            min={1}
+            required
+          />
+          <span>
+            px
+          </span>
+        </div>
+      </label>
+      <label class="form-control">
+        <span class="label-text">Overlay Height</span>
+        <div class="flex gap-1 items-center">
+          <input
+            value={settings.overlayHeight}
+            onInput={(ev) => setSettings({ overlayHeight: Number.parseInt(ev.currentTarget.value) })}
+            class="input flex-1"
+            type="number"
+            min={0}
+            required
+          />
+          <span>
+            rem
+          </span>
+        </div>
+      </label>
+      <label class="form-control">
         <span class="label-text">Script</span>
         <textarea
           onInput={(ev) => setSettings({ script: ev.currentTarget.value })}
