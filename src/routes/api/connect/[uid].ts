@@ -21,19 +21,7 @@ export async function GET(ev: APIEvent) {
   }, c.signal)
 
   ev.node.res.on("close", () => {
-    console.log(`client '${clientUid}' left`)
     c.abort()
     clearInterval(ping)
   })
-
-  //while (true) {
-  //  try {
-  //    let command = await popCommandBlocking("XXX", { signal: c.signal })
-  //    if (command === null) { break }
-  //    ev.node.res.write(`data: ${JSON.stringify(command)}\n\n`)
-  //  } catch (err) {
-  //    if (err instanceof Error && err.name === 'AbortError') { break }
-  //    throw err
-  //  }
-  //}
 }
