@@ -14,30 +14,30 @@ export type Settings = {
   overlayHeight: number
 }
 
-function writeSettings(settings: Settings) {
-  localStorage.setItem(`${SETTINGS_PREFIX}script`, settings.script)
-  localStorage.setItem(`${SETTINGS_PREFIX}scrollInterval`, `${settings.scrollInterval}`)
-  localStorage.setItem(`${SETTINGS_PREFIX}scrollAmount`, `${settings.scrollAmount}`)
-  localStorage.setItem(`${SETTINGS_PREFIX}advanceScrollAmount`, `${settings.advanceScrollAmount}`)
-  localStorage.setItem(`${SETTINGS_PREFIX}backgroundColor`, `${settings.backgroundColor}`)
-  localStorage.setItem(`${SETTINGS_PREFIX}textColor`, `${settings.textColor}`)
-  localStorage.setItem(`${SETTINGS_PREFIX}textSize`, `${settings.textSize}`)
-  localStorage.setItem(`${SETTINGS_PREFIX}maxWidth`, `${settings.maxWidth}`)
-  localStorage.setItem(`${SETTINGS_PREFIX}overlayHeight`, `${settings.overlayHeight}`)
+function settingsOrDefault(s: Settings): Settings {
+  return {
+    script: s.script || "The quick brown fox jumped over the lazy hen...",
+    scrollInterval: s.scrollInterval || 32,
+    scrollAmount: s.scrollAmount || 1,
+    advanceScrollAmount: s.advanceScrollAmount || 100,
+    backgroundColor: s.backgroundColor || "#ffffff",
+    textColor: s.textColor || "#000000",
+    textSize: s.textSize || 3,
+    maxWidth: s.maxWidth || 800,
+    overlayHeight: s.overlayHeight || 0,
+  }
+}
+
+function writeSettings(s: Settings) {
+  let { script, ...settings } = s
+  localStorage.setItem(`${SETTINGS_PREFIX}settings`, JSON.stringify(settings))
+  localStorage.setItem(`${SETTINGS_PREFIX}script`, script)
 }
 
 function readSettings(): Settings {
-  return {
-    script: localStorage.getItem(`${SETTINGS_PREFIX}script`) || "The quick brown fox jumped over the lazy hen...",
-    scrollInterval: Number.parseInt(localStorage.getItem(`${SETTINGS_PREFIX}scrollInterval`) || "32"),
-    scrollAmount: Number.parseInt(localStorage.getItem(`${SETTINGS_PREFIX}scrollAmount`) || "1"),
-    advanceScrollAmount: Number.parseInt(localStorage.getItem(`${SETTINGS_PREFIX}advanceScrollAmount`) || "100"),
-    backgroundColor: localStorage.getItem(`${SETTINGS_PREFIX}backgroundColor`) || "#ffffff",
-    textColor: localStorage.getItem(`${SETTINGS_PREFIX}textColor`) || "#000000",
-    textSize: Number.parseInt(localStorage.getItem(`${SETTINGS_PREFIX}textSize`) || "3"),
-    maxWidth: Number.parseInt(localStorage.getItem(`${SETTINGS_PREFIX}maxWidth`) || "800"),
-    overlayHeight: Number.parseInt(localStorage.getItem(`${SETTINGS_PREFIX}overlayHeight`) || "0"),
-  }
+  let settings = JSON.parse(localStorage.getItem(`${SETTINGS_PREFIX}settings`) || "{}")
+  let script = localStorage.getItem(`${SETTINGS_PREFIX}script`)
+  return settingsOrDefault({ script, ...settings })
 }
 
 function clearSettings() {
