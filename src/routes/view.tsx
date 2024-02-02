@@ -1,5 +1,6 @@
-import { For, Show, onCleanup, onMount } from "solid-js"
+import { For, Show, createSignal, onCleanup, onMount } from "solid-js"
 import createSettingsStore from "~/core/settings"
+import { RemoteCommand, RemoteCommandType } from "~/core/types";
 
 function smartScroll(element: HTMLElement, amount: number): { currentScroll: number, end: boolean } {
   let currentScroll = element.scrollTop;
@@ -15,6 +16,7 @@ export default function View() {
   let scriptContainer: HTMLDivElement
 
   const [settings] = createSettingsStore()
+  const [viewerUID, setViewerUID] = createSignal<string>()
 
   const scriptLines = () => settings.script.split("\n\n")
 
@@ -58,6 +60,19 @@ export default function View() {
           advanceScroll()
           return false
       }
+    }
+
+    if (isSecureContext) {
+      let viewerUID = crypto.randomUUID()
+      setViewerUID(viewerUID)
+      let events = new EventSource(`/api/connect/${viewerUID}`)
+      events.addEventListener("message", ({ data }) => {
+        let remoteCommand: RemoteCommand = JSON.parse(data)
+        if (remoteCommand.commandType === RemoteCommandType.TOGGLE_SCROLL) {
+          play = !play
+        }
+      })
+      onCleanup(() => events.close())
     }
 
     document.addEventListener("keydown", keyDownTextField, false)
