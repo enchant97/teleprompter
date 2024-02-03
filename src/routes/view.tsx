@@ -65,10 +65,10 @@ export default function View() {
     if (isSecureContext) {
       let viewerUID = crypto.randomUUID()
       setViewerUID(viewerUID)
-      let events = new EventSource(`/api/connect/${viewerUID}`)
+      let events = new EventSource(`/api/prompter/${viewerUID}/connect`)
       events.addEventListener("message", ({ data }) => {
         let remoteCommand: RemoteCommand = JSON.parse(data)
-        if (remoteCommand.commandType === RemoteCommandType.TOGGLE_SCROLL) {
+        if (remoteCommand.commandType === RemoteCommandType.TOGGLE_PLAY) {
           play = !play
         }
       })

@@ -1,5 +1,5 @@
 export enum RemoteCommandType {
-  TOGGLE_SCROLL = "TOGGLE_SCROLL"
+  TOGGLE_PLAY = "TOGGLE_PLAY"
 }
 
 export type RemoteCommand = {
