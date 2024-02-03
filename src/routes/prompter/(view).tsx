@@ -2,13 +2,13 @@ import { For, Show, createSignal, onCleanup, onMount } from "solid-js"
 import createSettingsStore from "~/core/settings"
 import { RemoteCommand, RemoteCommandType } from "~/core/types";
 
-function smartScroll(element: HTMLElement, amount: number): { currentScroll: number, end: boolean } {
+function smartScroll(element: HTMLElement, amount: number): { end: boolean } {
   let currentScroll = element.scrollTop;
   if (element.scrollTop === (element.scrollHeight - element.offsetHeight)) {
-    return { currentScroll, end: true }
+    return { end: true }
   } else {
     element.scroll({ top: currentScroll + amount, behavior: "smooth" });
-    return { currentScroll, end: false }
+    return { end: false }
   }
 }
 
@@ -16,6 +16,7 @@ export default function View() {
   let scriptContainer: HTMLDivElement
 
   const [settings] = createSettingsStore()
+  const [play, setPlay] = createSignal(false)
   const [viewerUID, setViewerUID] = createSignal<string>()
 
   const scriptLines = () => settings.script.split("\n\n")
@@ -31,29 +32,25 @@ export default function View() {
   `
 
   onMount(() => {
-    let play = true;
-    let currentScroll = 0;
     let speed = settings.scrollInterval;
 
     function autoScroll() {
-      if (play == true) {
-        let { currentScroll: newScroll, end } = smartScroll(scriptContainer, settings.scrollAmount)
-        currentScroll = newScroll
-        play = !end
+      if (play()) {
+        let { end } = smartScroll(scriptContainer, settings.scrollAmount)
+        setPlay(!end)
       }
     }
 
     function advanceScroll() {
-      let { currentScroll: newScroll, end } = smartScroll(scriptContainer, settings.advanceScrollAmount)
-      currentScroll = newScroll
-      if (end) { play = false }
+      let { end } = smartScroll(scriptContainer, settings.advanceScrollAmount)
+      if (end) { setPlay(false) }
     }
 
     function keyDownTextField(ev: KeyboardEvent) {
       switch (ev.key) {
         case "s":
           ev.preventDefault()
-          play = !play
+          setPlay(play => !play)
           return false
         case "a":
           ev.preventDefault()
@@ -69,7 +66,7 @@ export default function View() {
       events.addEventListener("message", ({ data }) => {
         let remoteCommand: RemoteCommand = JSON.parse(data)
         if (remoteCommand.commandType === RemoteCommandType.TOGGLE_PLAY) {
-          play = !play
+          setPlay(play => !play)
         }
       })
       onCleanup(() => events.close())
