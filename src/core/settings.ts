@@ -12,6 +12,7 @@ export type Settings = {
   textSize: number
   maxWidth: number
   overlayHeight: number
+  connectCode?: string
 }
 
 function settingsOrDefault(s: Settings): Settings {
@@ -25,6 +26,7 @@ function settingsOrDefault(s: Settings): Settings {
     textSize: s.textSize || 3,
     maxWidth: s.maxWidth || 800,
     overlayHeight: s.overlayHeight || 0,
+    connectCode: s.connectCode
   }
 }
 

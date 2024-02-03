@@ -1,3 +1,4 @@
+import { Show } from "solid-js"
 import createSettingsStore from "~/core/settings"
 
 export default function Setup() {
@@ -144,6 +145,38 @@ export default function Setup() {
           </span>
         </div>
       </label>
+      <label class="form-control">
+        <span class="label-text">Script</span>
+        <textarea
+          onInput={(ev) => setSettings({ script: ev.currentTarget.value })}
+          class="input"
+          rows={10}
+          required
+        >{settings.script}</textarea>
+      </label>
+      <div class="form-control">
+        <span class="label-text">Connect Code (For Remotes)</span>
+        <div class="flex gap-1 items-center">
+          <code class="flex-1">{settings.connectCode || "__DISABLED__"}</code>
+          <Show when={isSecureContext}>
+            <Show when={settings.connectCode} fallback={
+              <button
+                onClick={() => setSettings({ connectCode: crypto.randomUUID() })}
+                class="btn"
+              >
+                Generate
+              </button>
+            }>
+              <button
+                onClick={() => setSettings({ connectCode: undefined })}
+                class="btn error"
+              >
+                Disable
+              </button>
+            </Show>
+          </Show>
+        </div>
+      </div>
       <label class="form-control">
         <span class="label-text">Script</span>
         <textarea

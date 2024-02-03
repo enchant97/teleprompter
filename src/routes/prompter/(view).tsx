@@ -17,7 +17,6 @@ export default function View() {
 
   const [settings] = createSettingsStore()
   const [play, setPlay] = createSignal(false)
-  const [viewerUID, setViewerUID] = createSignal<string>()
 
   const scriptLines = () => settings.script.split("\n\n")
 
@@ -59,10 +58,8 @@ export default function View() {
       }
     }
 
-    if (isSecureContext) {
-      let viewerUID = crypto.randomUUID()
-      setViewerUID(viewerUID)
-      let events = new EventSource(`/api/prompter/${viewerUID}/connect`)
+    if (isSecureContext && settings.connectCode) {
+      let events = new EventSource(`/api/prompter/${settings.connectCode}/connect`)
       events.addEventListener("message", ({ data }) => {
         let remoteCommand: RemoteCommand = JSON.parse(data)
         if (remoteCommand.commandType === RemoteCommandType.TOGGLE_PLAY) {
