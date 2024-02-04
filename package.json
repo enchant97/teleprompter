@@ -11,11 +11,13 @@
   "dependencies": {
     "@solidjs/router": "^0.10.10",
     "@solidjs/start": "^0.4.11",
+    "qrcode": "^1.5.3",
     "redis": "^4.6.12",
     "solid-js": "^1.8.12",
     "vinxi": "^0.1.10"
   },
   "devDependencies": {
+    "@types/qrcode": "^1.5.5",
     "autoprefixer": "^10.4.17",
     "postcss": "^8.4.33",
     "tailwindcss": "^3.4.1"

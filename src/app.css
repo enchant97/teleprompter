@@ -8,6 +8,10 @@
     @apply bg-neutral-800 text-neutral-200;
   }
 
+  .modal {
+    @apply bg-neutral-800 text-neutral-200;
+  }
+
   textarea,
   input {
     @apply bg-neutral-800 text-neutral-200 border-neutral-600;
@@ -18,7 +22,7 @@
   .btn {
     @apply bg-neutral-700 hover:bg-neutral-950 duration-200 text-neutral-200 px-3 py-2 rounded shadow;
   }
-
+ m-4
   .btn.primary {
     @apply bg-blue-800 hover:bg-blue-900;
   }
@@ -41,5 +45,13 @@
 
   .input-color {
     @apply border border-neutral-300 rounded;
+  }
+
+  .modal {
+    @apply w-full max-w-screen-sm h-full max-h-96 p-4 rounded bg-white;
+  }
+
+  .modal::backdrop {
+    @apply backdrop-blur;
   }
 }

@@ -58,7 +58,7 @@ export default function View() {
       }
     }
 
-    if (isSecureContext && settings.connectCode) {
+    if (settings.connectCode) {
       let events = new EventSource(`/api/prompter/${settings.connectCode}/connect`)
       events.addEventListener("message", ({ data }) => {
         let remoteCommand: RemoteCommand = JSON.parse(data)
