@@ -26,10 +26,6 @@ export default function View() {
     font-size: ${settings.textSize}rem;
   `
 
-  const overlayStyle = () => `
-    top: ${settings.overlayHeight}rem;
-  `
-
   onMount(() => {
     let speed = settings.scrollInterval;
 
@@ -82,17 +78,19 @@ export default function View() {
   return (
     <div
       ref={(el) => scriptContainer = el}
-      class="leading-relaxed py-32 overflow-y-scroll"
+      class="leading-relaxed overflow-y-scroll"
       style={scriptStyle()}
     >
-      <Show when={settings.overlayHeight !== 0}>
-        <div class="fixed bg-[#0000009c] w-full h-[100vh]" style={overlayStyle()}></div>
-      </Show>
+      <div>
+        <div class="fixed bg-[#0000009c] w-full top-0" style={`height:${settings.overlayTop}vh`}></div>
+        <div class="fixed bg-[#0000009c] w-full bottom-0" style={`height:${settings.overlayBottom}vh`}></div>
+      </div>
+      <hr class="mt-[90vh]" />
       <For each={scriptLines()}>
         {line => <p class="mt-12 mx-auto" style={`max-width:${settings.maxWidth}px`}>{line}</p>}
       </For>
-      <hr class="mb-[100vh]" />
+      <hr class="mb-[90vh]" />
       <button onClick={() => scriptContainer.scroll({ top: 0 })} class="btn w-full sticky z-10">To Top</button>
-    </div >
+    </div>
   )
 }

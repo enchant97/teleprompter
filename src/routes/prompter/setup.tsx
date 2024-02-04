@@ -159,19 +159,35 @@ export default function Setup() {
           </div>
         </label>
         <label class="form-control">
-          <span class="label-text">Overlay Height</span>
+          <span class="label-text">Overlay Top</span>
           <div class="flex gap-1 items-center">
             <input
-              value={settings.overlayHeight}
-              onInput={(ev) => setSettings({ overlayHeight: Number.parseInt(ev.currentTarget.value) })}
+              value={settings.overlayTop}
+              onInput={(ev) => setSettings({ overlayTop: Number.parseInt(ev.currentTarget.value) })}
               class="input flex-1"
-              type="number"
+              type="range"
               min={0}
+              max={100}
+              step={1}
               required
             />
-            <span>
-              rem
-            </span>
+            <span>{settings.overlayTop}%</span>
+          </div>
+        </label>
+        <label class="form-control">
+          <span class="label-text">Overlay Bottom</span>
+          <div class="flex gap-1 items-center">
+            <input
+              value={settings.overlayBottom}
+              onInput={(ev) => setSettings({ overlayBottom: Number.parseInt(ev.currentTarget.value) })}
+              class="input flex-1"
+              type="range"
+              min={0}
+              max={100}
+              step={1}
+              required
+            />
+            <span>{settings.overlayBottom}%</span>
           </div>
         </label>
         <label class="form-control">

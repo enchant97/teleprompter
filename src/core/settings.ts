@@ -11,7 +11,8 @@ export type Settings = {
   textColor: string
   textSize: number
   maxWidth: number
-  overlayHeight: number
+  overlayTop: number
+  overlayBottom: number
   connectCode?: string
 }
 
@@ -25,7 +26,8 @@ function settingsOrDefault(s: Settings): Settings {
     textColor: s.textColor || "#000000",
     textSize: s.textSize || 3,
     maxWidth: s.maxWidth || 800,
-    overlayHeight: s.overlayHeight || 0,
+    overlayTop: s.overlayTop || 30,
+    overlayBottom: s.overlayBottom || 30,
     connectCode: s.connectCode
   }
 }
