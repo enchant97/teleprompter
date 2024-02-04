@@ -36,6 +36,7 @@ export default function Setup() {
             <h2 class="text-lg font-bold">Connect URL</h2>
             <a class="underline" target="_blank" href={remoteUrl()}>{remoteUrl()}</a>
             <canvas ref={(el) => shareCodeQrCode = el} />
+            <button onClick={() => shareCodeModal.close()} class="btn mt-4">Close</button>
           </div>
         </dialog>
       </Portal>

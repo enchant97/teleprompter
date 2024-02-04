@@ -48,7 +48,7 @@
   }
 
   .modal {
-    @apply w-full max-w-screen-sm h-full max-h-96 p-4 rounded bg-white;
+    @apply w-full max-w-screen-sm min-h-96 p-4 rounded bg-white;
   }
 
   .modal::backdrop {
