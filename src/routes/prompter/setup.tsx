@@ -191,15 +191,6 @@ export default function Setup() {
             <span>{settings.overlayBottom}%</span>
           </div>
         </label>
-        <label class="form-control">
-          <span class="label-text">Script</span>
-          <textarea
-            onInput={(ev) => setSettings({ script: ev.currentTarget.value })}
-            class="input"
-            rows={10}
-            required
-          >{settings.script}</textarea>
-        </label>
         <div class="form-control">
           <span class="label-text">Connect Code (For Remotes)</span>
           <div class="flex gap-1 items-center">
