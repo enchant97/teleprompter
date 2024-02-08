@@ -106,7 +106,7 @@ export default function View() {
         </Show>
       </Portal>
       <div class="z-10 fixed bottom-0 right-0 flex w-full p-2">
-        <div class="mr-auto p-2 flex items-center bg-neutral-900 fg-neutral-200">{`${scrollPercent()}%`}</div>
+        <div class="mr-auto p-2 flex items-center bg-neutral-900 text-neutral-200">{`${scrollPercent()}%`}</div>
         <div class="flex gap-1 items-center">
           <button onClick={() => scriptContainer.scroll({ top: 0 })} class="btn">
             <Icon name="arrow-up" />
