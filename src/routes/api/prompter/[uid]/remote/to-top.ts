@@ -6,7 +6,7 @@ export async function PUT(ev: APIEvent) {
   let clientUid = ev.params.uid
   if (await hasSubscibers(clientUid)) {
     await publishCommand(clientUid, {
-      commandType: RemoteCommandType.TOGGLE_PLAY,
+      commandType: RemoteCommandType.TO_TOP,
     })
     return new Response(null, { status: 204 })
   }

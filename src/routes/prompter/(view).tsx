@@ -60,6 +60,8 @@ export default function View() {
         let remoteCommand: RemoteCommand = JSON.parse(data)
         if (remoteCommand.commandType === RemoteCommandType.TOGGLE_PLAY) {
           setPlay(play => !play)
+        } else if (remoteCommand.commandType === RemoteCommandType.TO_TOP) {
+          scriptContainer.scroll({ top: 0 })
         }
       })
       onCleanup(() => events.close())
