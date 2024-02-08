@@ -1,4 +1,7 @@
 import { For, Show, createSignal, onCleanup, onMount } from "solid-js"
+import { Portal } from "solid-js/web";
+import Icon from "~/components/icon";
+import { ShareModal } from "~/components/modals";
 import createSettingsStore from "~/core/settings"
 import { RemoteCommand, RemoteCommandType } from "~/core/types";
 
@@ -17,6 +20,7 @@ export default function View() {
 
   const [settings] = createSettingsStore()
   const [play, setPlay] = createSignal(false)
+  const [shareModalOpen, setShareModalOpen] = createSignal(false)
 
   const scriptLines = () => settings.script.split("\n\n")
 
@@ -78,21 +82,43 @@ export default function View() {
   })
 
   return (
-    <div
-      ref={(el) => scriptContainer = el}
-      class="leading-relaxed overflow-y-scroll"
-      style={scriptStyle()}
-    >
-      <div>
-        <div class="fixed bg-[#0000009c] w-full top-0" style={`height:${settings.overlayTop}vh`}></div>
-        <div class="fixed bg-[#0000009c] w-full bottom-0" style={`height:${settings.overlayBottom}vh`}></div>
+    <>
+      <Portal>
+        <Show when={settings.connectCode} keyed>
+          {connectCode => <ShareModal isOpen={shareModalOpen} onClose={() => setShareModalOpen(false)} connectCode={connectCode} />}
+        </Show>
+      </Portal>
+      <div class="z-10 fixed bottom-2 right-2 flex">
+        <button onClick={() => scriptContainer.scroll({ top: 0 })} class="btn">
+          <Icon name="arrow-up" />
+        </button>
+        <label class="btn">
+          <input type="checkbox" class="hidden" checked={play()} onChange={(ev) => setPlay(ev.currentTarget.checked)} />
+          <Show when={play()} fallback={<Icon name="pause" />}>
+            <Icon name="play" />
+          </Show>
+        </label>
+        <Show when={settings.connectCode}>
+          <button onClick={() => setShareModalOpen(true)} class="btn">
+            <Icon name="cast" />
+          </button>
+        </Show>
       </div>
-      <hr class="mt-[90vh]" />
-      <For each={scriptLines()}>
-        {line => <p class="mt-12 mx-auto" style={`max-width:${settings.maxWidth}px`}>{line}</p>}
-      </For>
-      <hr class="mb-[90vh]" />
-      <button onClick={() => scriptContainer.scroll({ top: 0 })} class="btn w-full sticky z-10">To Top</button>
-    </div>
+      <div
+        ref={(el) => scriptContainer = el}
+        class="leading-relaxed overflow-y-scroll"
+        style={scriptStyle()}
+      >
+        <div>
+          <div class="fixed bg-[#0000009c] w-full top-0" style={`height:${settings.overlayTop}vh`}></div>
+          <div class="fixed bg-[#0000009c] w-full bottom-0" style={`height:${settings.overlayBottom}vh`}></div>
+        </div>
+        <hr class="mt-[90vh]" />
+        <For each={scriptLines()}>
+          {line => <p class="mt-12 mx-auto" style={`max-width:${settings.maxWidth}px`}>{line}</p>}
+        </For>
+        <hr class="mb-[90vh]" />
+      </div>
+    </>
   )
 }

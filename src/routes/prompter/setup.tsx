@@ -1,44 +1,23 @@
-import { Show, createEffect } from "solid-js"
+import { Show, createSignal } from "solid-js"
 import { Portal } from "solid-js/web"
+import { ShareModal } from "~/components/modals"
 import createSettingsStore from "~/core/settings"
-import QRCode from "qrcode"
 
 export default function Setup() {
-  let shareCodeModal: HTMLDialogElement
-  let shareCodeQrCode: HTMLCanvasElement
+  const [shareModalOpen, setShareModalOpen] = createSignal(false)
   const [settings, setSettings, { save, clear, load }] = createSettingsStore()
-
-  const remoteUrl = () => {
-    if (settings.connectCode) {
-      return `${window.location.origin}/remote/${settings.connectCode}`
-    }
-  }
 
   const clearSettings = () => {
     clear()
     load()
   }
 
-  createEffect(() => {
-    let contents = remoteUrl()
-    if (contents) {
-      QRCode.toCanvas(shareCodeQrCode, contents)
-    }
-  })
-
   return (
     <>
       <Portal>
-        <dialog class="modal" ref={(el) => shareCodeModal = el}>
-          <div class="flex flex-col items-center gap-2">
-            <h2 class="text-lg font-bold">Connect Code</h2>
-            <code>{settings.connectCode || ""}</code>
-            <h2 class="text-lg font-bold">Connect URL</h2>
-            <a class="underline" target="_blank" href={remoteUrl()}>{remoteUrl()}</a>
-            <canvas ref={(el) => shareCodeQrCode = el} />
-            <button onClick={() => shareCodeModal.close()} class="btn mt-4">Close</button>
-          </div>
-        </dialog>
+        <Show when={settings.connectCode} keyed>
+          {connectCode => <ShareModal isOpen={shareModalOpen} onClose={() => setShareModalOpen(false)} connectCode={connectCode} />}
+        </Show>
       </Portal>
       <form
         onSubmit={(ev) => {
@@ -206,7 +185,7 @@ export default function Setup() {
               </Show>
             }>
               <button
-                onClick={() => shareCodeModal.showModal()}
+                onClick={() => setShareModalOpen(true)}
                 class="btn"
               >
                 Share
