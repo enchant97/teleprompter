@@ -21,6 +21,13 @@ export default function View() {
   const [settings] = createSettingsStore()
   const [play, setPlay] = createSignal(false)
   const [shareModalOpen, setShareModalOpen] = createSignal(false)
+  const [currentScroll, setCurrentScroll] = createSignal({
+    scrollTop: 0,
+    scrollHeight: 0,
+    clientHeight: 0,
+  })
+
+  const scrollPercent = () => Math.round((currentScroll().scrollTop / (currentScroll().scrollHeight - currentScroll().clientHeight)) * 100) || 0
 
   const scriptLines = () => settings.script.split("\n\n")
 
@@ -71,12 +78,22 @@ export default function View() {
       onCleanup(() => events.close())
     }
 
+    function onScroll() {
+      setCurrentScroll({
+        scrollTop: scriptContainer.scrollTop,
+        scrollHeight: scriptContainer.scrollHeight,
+        clientHeight: scriptContainer.clientHeight,
+      })
+    }
+
+    scriptContainer.addEventListener("scroll", onScroll)
     document.addEventListener("keydown", keyDownTextField, false)
 
     let scroller = setInterval(autoScroll, speed);
 
     onCleanup(() => {
       document.removeEventListener("keydown", keyDownTextField, false)
+      scriptContainer.removeEventListener("scroll", onScroll)
       clearInterval(scroller)
     })
   })
@@ -88,25 +105,28 @@ export default function View() {
           {connectCode => <ShareModal isOpen={shareModalOpen} onClose={() => setShareModalOpen(false)} connectCode={connectCode} />}
         </Show>
       </Portal>
-      <div class="z-10 fixed bottom-2 right-2 flex">
-        <button onClick={() => scriptContainer.scroll({ top: 0 })} class="btn">
-          <Icon name="arrow-up" />
-        </button>
-        <label class="btn">
-          <input type="checkbox" class="hidden" checked={play()} onChange={(ev) => setPlay(ev.currentTarget.checked)} />
-          <Show when={play()} fallback={<Icon name="pause" />}>
-            <Icon name="play" />
-          </Show>
-        </label>
-        <Show when={settings.connectCode}>
-          <button onClick={() => setShareModalOpen(true)} class="btn">
-            <Icon name="cast" />
+      <div class="z-10 fixed bottom-0 right-0 flex w-full p-2">
+        <div class="mr-auto p-2 flex items-center bg-neutral-900 fg-neutral-200">{`${scrollPercent()}%`}</div>
+        <div class="flex gap-1 items-center">
+          <button onClick={() => scriptContainer.scroll({ top: 0 })} class="btn">
+            <Icon name="arrow-up" />
           </button>
-        </Show>
+          <label class="btn">
+            <input type="checkbox" class="hidden" checked={play()} onChange={(ev) => setPlay(ev.currentTarget.checked)} />
+            <Show when={play()} fallback={<Icon name="pause" />}>
+              <Icon name="play" />
+            </Show>
+          </label>
+          <Show when={settings.connectCode}>
+            <button onClick={() => setShareModalOpen(true)} class="btn">
+              <Icon name="cast" />
+            </button>
+          </Show>
+        </div>
       </div>
       <div
         ref={(el) => scriptContainer = el}
-        class="leading-relaxed overflow-y-scroll"
+        class="leading-relaxed overflow-y-scroll select-none"
         style={scriptStyle()}
       >
         <div>
