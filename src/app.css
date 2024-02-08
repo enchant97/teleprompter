@@ -19,6 +19,34 @@
 }
 
 @layer components {
+  h1 {
+    @apply text-4xl font-bold;
+  }
+
+  h2 {
+    @apply text-2xl font-bold;
+  }
+
+  h3 {
+    @apply text-xl font-bold;
+  }
+
+  p {
+    @apply py-2;
+  }
+
+  ul {
+    @apply list-disc my-2 pl-8;
+  }
+
+  ol {
+    @apply list-decimal my-2 pl-8;
+  }
+
+  li {
+    @apply py-1;
+  }
+
   .btn {
     @apply bg-neutral-700 hover:bg-neutral-950 duration-200 text-neutral-200 px-3 py-2 rounded shadow;
   }

@@ -7,7 +7,7 @@ export default function Remote() {
 
   return (
     <div>
-      <h1 class="text-4xl font-bold">Prompter Remote</h1>
+      <h1>Prompter Remote</h1>
       <p>Connect Code: {prompterUid()}</p>
       <button
         onClick={async () => fetch(`/api/prompter/${prompterUid()}/remote/toggle-play`, { method: "PUT" })}
