@@ -4,7 +4,7 @@ FROM oven/bun:1 as base
 
     COPY package.json bun.lockb ./
 
-    RUN bun install --frozen-lockfile
+    RUN bun install --frozen-lockfile --production
 
 FROM base as builder
 
