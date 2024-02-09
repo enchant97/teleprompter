@@ -146,7 +146,7 @@ export default function Setup() {
               onInput={(ev) => setSettings({ overlayTop: Number.parseInt(ev.currentTarget.value) })}
               class="input flex-1"
               type="range"
-              min={0}
+              min={1}
               max={100}
               step={1}
               required
@@ -162,7 +162,7 @@ export default function Setup() {
               onInput={(ev) => setSettings({ overlayBottom: Number.parseInt(ev.currentTarget.value) })}
               class="input flex-1"
               type="range"
-              min={0}
+              min={1}
               max={100}
               step={1}
               required
