@@ -17,18 +17,20 @@ export async function GET(ev: APIEvent) {
     "Connection": "keep-alive",
   })
 
+  let c = new AbortController()
+
   let ping = setInterval(() => {
     ev.node.res.write(': ping\n\n')
   }, 5 * 1000)
 
-  let c = new AbortController()
+  c.signal.addEventListener("abort", () => {
+    clearInterval(ping)
+    ev.node.res.destroy()
+  })
 
   subscribeForCommands(clientUid, (command: RemoteCommand) => {
     ev.node.res.write(`data: ${JSON.stringify(command)}\n\n`)
   }, c.signal)
 
-  ev.node.res.on("close", () => {
-    c.abort()
-    clearInterval(ping)
-  })
+  ev.node.req.once("close", () => c.abort())
 }
