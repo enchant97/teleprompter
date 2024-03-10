@@ -123,6 +123,14 @@ export default function Setup() {
           </div>
         </label>
         <label class="form-control">
+          <span class="label-text">Text Alignment</span>
+          <select class="input" onChange={(ev) => setSettings({ textAlignment: ev.currentTarget.value })}>
+            <option selected={settings.textAlignment === "left"} value="left">Left</option>
+            <option selected={settings.textAlignment === "center"} value="center">Center</option>
+            <option selected={settings.textAlignment === "right"} value="right">Right</option>
+          </select>
+        </label>
+        <label class="form-control">
           <span class="label-text">Max Width</span>
           <div class="flex gap-1 items-center">
             <input

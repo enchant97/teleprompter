@@ -10,6 +10,7 @@ export type Settings = {
   backgroundColor: string
   textColor: string
   textSize: number
+  textAlignment: "left" | "center" | "right"
   maxWidth: number
   overlayTop: number
   overlayBottom: number
@@ -25,6 +26,7 @@ function settingsOrDefault(s: Settings): Settings {
     backgroundColor: s.backgroundColor || "#ffffff",
     textColor: s.textColor || "#000000",
     textSize: s.textSize || 3,
+    textAlignment: s.textAlignment || "center",
     maxWidth: s.maxWidth || 800,
     overlayTop: s.overlayTop || 30,
     overlayBottom: s.overlayBottom || 30,

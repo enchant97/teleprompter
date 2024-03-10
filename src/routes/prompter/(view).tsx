@@ -35,6 +35,7 @@ export default function View() {
     color: ${settings.textColor};
     background-color: ${settings.backgroundColor};
     font-size: ${settings.textSize}rem;
+    text-align: ${settings.textAlignment};
   `
 
   onMount(() => {
