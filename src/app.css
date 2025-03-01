@@ -1,24 +1,12 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-    @apply bg-neutral-800 text-neutral-200;
+@layer base {
+  body {
+    @variant dark {
+      @apply bg-neutral-800 text-neutral-200;
+    }
   }
 
-  .modal {
-    @apply bg-neutral-800 text-neutral-200;
-  }
-
-  textarea,
-  input {
-    @apply bg-neutral-800 text-neutral-200 border-neutral-600;
-  }
-}
-
-@layer components {
   h1 {
     @apply text-4xl font-bold;
   }
@@ -47,6 +35,15 @@
     @apply py-1;
   }
 
+  textarea,
+  input {
+    @variant dark {
+      @apply bg-neutral-800 text-neutral-200 border-neutral-600;
+    }
+  }
+}
+
+@layer components {
   .btn {
     @apply bg-neutral-700 hover:bg-neutral-950 duration-200 text-neutral-200 px-3 py-2 rounded shadow;
   }
@@ -77,6 +74,10 @@
 
   .modal {
     @apply w-full max-w-screen-sm min-h-96 p-4 rounded bg-white;
+
+    @variant dark {
+      @apply bg-neutral-800 text-neutral-200;
+    }
   }
 
   .modal::backdrop {
