@@ -4,6 +4,7 @@ const SETTINGS_PREFIX = "teleprompter__"
 
 export type Settings = {
   script: string
+  mirror: boolean
   scrollInterval: number
   scrollAmount: number
   advanceScrollAmount: number
@@ -20,6 +21,7 @@ export type Settings = {
 function settingsOrDefault(s: Settings): Settings {
   return {
     script: s.script || "The quick brown fox jumped over the lazy hen...",
+    mirror: s.mirror || false,
     scrollInterval: s.scrollInterval || 32,
     scrollAmount: s.scrollAmount || 1,
     advanceScrollAmount: s.advanceScrollAmount || 100,

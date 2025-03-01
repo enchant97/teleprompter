@@ -5,9 +5,15 @@ import { ShareModal } from "~/components/modals";
 import createSettingsStore from "~/core/settings"
 import { RemoteCommand, RemoteCommandType } from "~/core/types";
 
-function smartScroll(element: HTMLElement, amount: number): { end: boolean } {
+function smartScroll(element: HTMLElement, amount: number, reverse: boolean): { end: boolean } {
   let currentScroll = element.scrollTop;
-  if (element.scrollTop === (element.scrollHeight - element.offsetHeight)) {
+  if (reverse) {
+    amount = -amount;
+  }
+  if (
+    (reverse && element.scrollTop === 0) ||
+    (!reverse && element.scrollTop === (element.scrollHeight - element.offsetHeight))
+  ) {
     return { end: true }
   } else {
     element.scroll({ top: currentScroll + amount, behavior: "smooth" });
@@ -27,7 +33,13 @@ export default function View() {
     clientHeight: 0,
   })
 
-  const scrollPercent = () => Math.round((currentScroll().scrollTop / (currentScroll().scrollHeight - currentScroll().clientHeight)) * 100) || 0
+  const scrollPercent = () => {
+    const perc = Math.round((currentScroll().scrollTop / (currentScroll().scrollHeight - currentScroll().clientHeight)) * 100) || 0
+    if (settings.mirror) {
+      return 100 - perc
+    }
+    return perc
+  }
 
   const scriptLines = () => settings.script.split("\n\n")
 
@@ -38,18 +50,28 @@ export default function View() {
     text-align: ${settings.textAlignment};
   `
 
+  function scrollToTop() {
+    if (settings.mirror) {
+      scriptContainer.scroll({ top: scriptContainer.scrollHeight })
+    } else {
+      scriptContainer.scroll({ top: 0 })
+    }
+  }
+
   onMount(() => {
+    scrollToTop()
+
     let speed = settings.scrollInterval;
 
     function autoScroll() {
       if (play()) {
-        let { end } = smartScroll(scriptContainer, settings.scrollAmount)
+        let { end } = smartScroll(scriptContainer, settings.scrollAmount, settings.mirror)
         setPlay(!end)
       }
     }
 
     function advanceScroll() {
-      let { end } = smartScroll(scriptContainer, settings.advanceScrollAmount)
+      let { end } = smartScroll(scriptContainer, settings.advanceScrollAmount, settings.mirror)
       if (end) { setPlay(false) }
     }
 
@@ -73,7 +95,7 @@ export default function View() {
         if (remoteCommand.commandType === RemoteCommandType.TOGGLE_PLAY) {
           setPlay(play => !play)
         } else if (remoteCommand.commandType === RemoteCommandType.TO_TOP) {
-          scriptContainer.scroll({ top: 0 })
+          scrollToTop()
         }
       })
       onCleanup(() => events.close())
@@ -103,17 +125,26 @@ export default function View() {
     <>
       <Portal>
         <Show when={settings.connectCode} keyed>
-          {connectCode => <ShareModal isOpen={shareModalOpen} onClose={() => setShareModalOpen(false)} connectCode={connectCode} />}
+          {connectCode => <ShareModal
+            isOpen={shareModalOpen}
+            onClose={() => setShareModalOpen(false)}
+            connectCode={connectCode}
+          />}
         </Show>
       </Portal>
       <div class="z-10 fixed bottom-0 right-0 flex w-full p-2">
         <div class="mr-auto p-2 flex items-center bg-neutral-900 text-neutral-200">{`${scrollPercent()}%`}</div>
         <div class="flex gap-1 items-center">
-          <button onClick={() => scriptContainer.scroll({ top: 0 })} class="btn">
+          <button onClick={() => scrollToTop()} class="btn">
             <Icon name="arrow-up" />
           </button>
           <label class="btn">
-            <input type="checkbox" class="hidden" checked={play()} onChange={(ev) => setPlay(ev.currentTarget.checked)} />
+            <input
+              type="checkbox"
+              class="hidden"
+              checked={play()}
+              onChange={(ev) => setPlay(ev.currentTarget.checked)}
+            />
             <Show when={play()} fallback={<Icon name="pause" />}>
               <Icon name="play" />
             </Show>
@@ -136,7 +167,11 @@ export default function View() {
         </div>
         <hr class="mt-[90vh]" />
         <For each={scriptLines()}>
-          {line => <p class="mt-12 mx-auto" style={`max-width:${settings.maxWidth}px`}>{line}</p>}
+          {line => <p
+            class="mt-12 mx-auto"
+            classList={{ "transform-[scale(1,-1)]": settings.mirror }}
+            style={`max-width:${settings.maxWidth}px`}
+          >{line}</p>}
         </For>
         <hr class="mb-[90vh]" />
       </div>

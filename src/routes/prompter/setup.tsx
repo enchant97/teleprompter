@@ -16,7 +16,11 @@ export default function Setup() {
     <>
       <Portal>
         <Show when={settings.connectCode} keyed>
-          {connectCode => <ShareModal isOpen={shareModalOpen} onClose={() => setShareModalOpen(false)} connectCode={connectCode} />}
+          {connectCode => <ShareModal
+            isOpen={shareModalOpen}
+            onClose={() => setShareModalOpen(false)}
+            connectCode={connectCode}
+          />}
         </Show>
       </Portal>
       <form
@@ -48,6 +52,16 @@ export default function Setup() {
           })
           input.click()
         }} class="btn">Upload (JSON)</button>
+        <label class="form-control">
+          <span class="label-text">Mirror Prompter</span>
+          <input
+            value="1"
+            checked={settings.mirror}
+            onInput={(ev) => setSettings({ mirror: ev.currentTarget.checked })}
+            class="input"
+            type="checkbox"
+          />
+        </label>
         <label class="form-control">
           <span class="label-text">Auto Scroll Interval</span>
           <div class="flex gap-1 items-center">
