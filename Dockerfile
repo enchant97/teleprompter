@@ -19,7 +19,7 @@ FROM base as builder
 
     RUN bun run build
 
-FROM node:21-slim
+FROM node:22-slim
 
     WORKDIR /usr/src/app
     EXPOSE 3000
