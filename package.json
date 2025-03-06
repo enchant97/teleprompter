@@ -15,14 +15,14 @@
     "qrcode": "^1.5.4",
     "redis": "^4.7.0",
     "solid-js": "^1.9.5",
-    "vinxi": "^0.5.3"
+    "vinxi": "^0.5.3",
+    "@tailwindcss/vite": "^4.0.9",
+    "tailwindcss": "^4.0.9"
   },
   "devDependencies": {
     "@types/bun": "^1.2.4",
     "@types/feather-icons": "^4.29.4",
-    "@types/qrcode": "^1.5.5",
-    "@tailwindcss/vite": "^4.0.9",
-    "tailwindcss": "^4.0.9"
+    "@types/qrcode": "^1.5.5"
   },
   "engines": {
     "node": ">=20"
