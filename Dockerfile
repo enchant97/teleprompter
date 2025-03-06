@@ -1,12 +1,12 @@
-FROM oven/bun:1 as base
+FROM oven/bun:1 AS base
 
     WORKDIR /usr/src/app
 
     COPY package.json bun.lockb ./
 
-    RUN bun install --frozen-lockfile --production
+    RUN bun install --frozen-lockfile
 
-FROM base as builder
+FROM base AS builder
 
     WORKDIR /usr/src/app
 
@@ -26,4 +26,4 @@ FROM node:22-slim
 
     COPY --from=builder /usr/src/app/.output ./
 
-    CMD node ./server/index.mjs
+    CMD [ "node", "./server/index.mjs" ]
