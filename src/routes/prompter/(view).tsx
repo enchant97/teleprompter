@@ -166,13 +166,17 @@ export default function View() {
           <div class="fixed bg-[#0000009c] w-full bottom-0" style={`height:${settings.overlayBottom}vh`}></div>
         </div>
         <hr class="mt-[90vh]" />
-        <For each={scriptLines()}>
-          {line => <p
-            class="mt-12 mx-auto"
-            classList={{ "transform-[scale(1,-1)]": settings.mirror }}
-            style={`max-width:${settings.maxWidth}px`}
-          >{line}</p>}
-        </For>
+        <div
+          class="mt-12 mx-auto"
+          classList={{
+            "transform-[scale(1,-1)]": settings.mirror,
+          }}
+          style={`max-width:${settings.maxWidth}px`}
+        >
+          <For each={scriptLines()}>
+            {line => <p>{line}</p>}
+          </For>
+        </div>
         <hr class="mb-[90vh]" />
       </div>
     </>
