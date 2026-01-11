@@ -45,7 +45,12 @@
 
 @layer components {
   .btn {
-    @apply bg-neutral-700 hover:bg-neutral-950 duration-200 text-neutral-200 px-3 py-2 rounded shadow;
+    @apply bg-neutral-700 hover:bg-neutral-950 duration-200 text-neutral-200 px-3 py-2 rounded shadow cursor-pointer;
+
+  }
+
+  .btn:active {
+    translate: 0 2px;
   }
 
   .btn.primary {
