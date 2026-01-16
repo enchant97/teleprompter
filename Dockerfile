@@ -19,10 +19,13 @@ FROM base AS builder
 
     RUN bun run build
 
-FROM oven/bun:1.3-distroless
+FROM oven/bun:1.3-slim
 
     WORKDIR /opt/teleprompter
     EXPOSE 3000
+
+    ENV HOST=0.0.0.0
+    ENV PORT=3000
 
     COPY --from=builder /usr/src/teleprompter/.output ./
 
