@@ -3,6 +3,8 @@ Teleprompter is a customisable web app allowing users to read off their script.
 
 > Currently a WIP, use at your own risk
 
+As seen on: [@enchantedcode](https://www.youtube.com/@enchantedcode).
+
 ## Features
 - Customisable prompter view
 - Keyboard shortcuts
@@ -17,9 +19,6 @@ Teleprompter is a customisable web app allowing users to read off their script.
     - Multiple server instances for load-balancing
     - HTTP/2.0 or HTTP/3.0 reverse proxy
 
-## Developer Notes
-- Although written using Bun, production builds currently must use "node-server". This is due to Server Side Events not working correctly
-
 ## Incomplete Features
 - Proper API validation
 - Error handling
@@ -27,7 +26,7 @@ Teleprompter is a customisable web app allowing users to read off their script.
 - Complete remote control functionality
 
 ## License
-This project is Copyright (c) 2023 Leo Spratt, licences shown below:
+This project is Copyright (c) 2026 Leo Spratt, licences shown below:
 
 Code
 

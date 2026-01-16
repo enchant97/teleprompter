@@ -1,6 +1,6 @@
-FROM oven/bun:1 AS base
+FROM oven/bun:1.3 AS base
 
-    WORKDIR /usr/src/app
+    WORKDIR /usr/src/teleprompter
 
     COPY package.json bun.lockb ./
 
@@ -8,22 +8,22 @@ FROM oven/bun:1 AS base
 
 FROM base AS builder
 
-    WORKDIR /usr/src/app
+    WORKDIR /usr/src/teleprompter
 
     ENV NODE_ENV=production
-    ENV SERVER_PRESET=node-server
+    ENV SERVER_PRESET=bun
 
-    COPY --from=base /usr/src/app/node_modules node_modules
+    COPY --from=base /usr/src/teleprompter/node_modules node_modules
 
     COPY . .
 
     RUN bun run build
 
-FROM node:22-slim
+FROM bun:1.3-distroless
 
-    WORKDIR /usr/src/app
+    WORKDIR /opt/teleprompter
     EXPOSE 3000
 
-    COPY --from=builder /usr/src/app/.output ./
+    COPY --from=builder /usr/src/teleprompter/.output ./
 
-    CMD [ "node", "./server/index.mjs" ]
+    CMD [ "bun", "run", "./server/index.mjs" ]

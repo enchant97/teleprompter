@@ -12,26 +12,37 @@ export async function GET(ev: APIEvent) {
     return new Response("400, Invalid Client Uid", { status: 400 })
   }
 
-  ev.nativeEvent.node.res.writeHead(200, {
-    "Content-Type": "text/event-stream",
-    "Cache-Control": "no-cache",
-    "Connection": "keep-alive",
-  })
+  const closeSignal = new AbortController()
+  const requestSignal = ev.request.signal
 
-  let c = new AbortController()
-
-  let ping = setInterval(() => {
-    ev.nativeEvent.node.res.write(': ping\n\n')
-  }, 5 * 1000)
-
-  c.signal.addEventListener("abort", () => {
-    clearInterval(ping)
-    ev.nativeEvent.node.res.destroy()
-  })
-
-  subscribeForCommands(clientUid, (command: RemoteCommand) => {
-    ev.nativeEvent.node.res.write(`data: ${JSON.stringify(command)}\n\n`)
-  }, c.signal)
-
-  ev.nativeEvent.node.req.once("close", () => c.abort())
+  return new Response(
+    new ReadableStream({
+      start(controller) {
+        const ping = setInterval(() => {
+          controller.enqueue(": ping\n\n")
+        }, 5_000)
+        subscribeForCommands(clientUid, (command: RemoteCommand) => {
+          controller.enqueue(`data: ${JSON.stringify(command)}\n\n`)
+        }, closeSignal.signal)
+        requestSignal.onabort = () => {
+          closeSignal.abort()
+          controller.close()
+        };
+        closeSignal.signal.addEventListener("abort", () => {
+          clearInterval(ping)
+        })
+      },
+      cancel() {
+        closeSignal.abort()
+      }
+    }),
+    {
+      status: 200,
+      headers: {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+      }
+    }
+  );
 }
