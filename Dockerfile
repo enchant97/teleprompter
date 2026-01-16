@@ -19,7 +19,7 @@ FROM base AS builder
 
     RUN bun run build
 
-FROM bun:1.3-distroless
+FROM oven/bun:1.3-distroless
 
     WORKDIR /opt/teleprompter
     EXPOSE 3000
