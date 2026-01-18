@@ -1,5 +1,5 @@
 import { type APIEvent } from "@solidjs/start/server";
-import { subscribeForCommands } from "~/core/redis";
+import { isRedisAvailable, subscribeForCommands } from "~/core/redis";
 import { RemoteCommand } from "~/core/types";
 
 const UUID_LOWER_RE = /^[0-9a-f]{8}\b-[0-9a-f]{4}\b-[0-9a-f]{4}\b-[0-9a-f]{4}\b-[0-9a-f]{12}$/
@@ -7,6 +7,10 @@ const UUID_LOWER_RE = /^[0-9a-f]{8}\b-[0-9a-f]{4}\b-[0-9a-f]{4}\b-[0-9a-f]{4}\b-
 export async function GET(ev: APIEvent) {
   "use server";
   let clientUid = ev.params.uid
+
+  if (!await isRedisAvailable()) {
+    return new Response("403, Remote Functionality Disabled By Administrator", { status: 403 })
+  }
 
   if (!UUID_LOWER_RE.test(clientUid)) {
     return new Response("400, Invalid Client Uid", { status: 400 })

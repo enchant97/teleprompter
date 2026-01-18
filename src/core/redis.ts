@@ -1,3 +1,5 @@
+"use server"
+
 import { type RedisClientType, createClient } from "redis";
 import { RemoteCommand } from "./types";
 
@@ -15,6 +17,12 @@ async function getPublisher() {
   if (publisher) { return publisher }
   publisher = await setupClient()
   return publisher
+}
+
+export async function isRedisAvailable() {
+  if (!process.env.REDIS_URI) { return false }
+  const publisher = await getPublisher()
+  return publisher !== undefined
 }
 
 export async function publishCommand(clientUid: string, command: RemoteCommand) {

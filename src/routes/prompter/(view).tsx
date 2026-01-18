@@ -1,4 +1,4 @@
-import { Show, createResource, createSignal, onCleanup, onMount } from "solid-js"
+import { Show, createEffect, createResource, createSignal, onCleanup, onMount } from "solid-js"
 import { Portal } from "solid-js/web";
 import DOMPurify from 'dompurify';
 import Icon from "~/components/icon";
@@ -6,6 +6,8 @@ import { ShareModal } from "~/components/modals";
 import createSettingsStore from "~/core/settings"
 import { RemoteCommand, RemoteCommandType } from "~/core/types";
 import { marked } from "marked";
+import { createAsync } from "@solidjs/router";
+import { isRedisAvailable } from "~/core/redis";
 
 function smartScroll(element: HTMLElement, amount: number, reverse: boolean): { end: boolean } {
   let currentScroll = element.scrollTop;
@@ -42,6 +44,7 @@ export default function View() {
     })
     return DOMPurify.sanitize(unsafeRendered)
   })
+  const isRemoteAvailable = createAsync(isRedisAvailable)
 
   const scrollPercent = () => {
     const perc = Math.round((currentScroll().scrollTop / (currentScroll().scrollHeight - currentScroll().clientHeight)) * 100) || 0
@@ -65,6 +68,21 @@ export default function View() {
       scriptContainer.scroll({ top: 0 })
     }
   }
+
+  createEffect(() => {
+    if (settings.connectCode && isRemoteAvailable()) {
+      let events = new EventSource(`/api/prompter/${settings.connectCode}/connect`)
+      events.addEventListener("message", ({ data }) => {
+        let remoteCommand: RemoteCommand = JSON.parse(data)
+        if (remoteCommand.commandType === RemoteCommandType.TOGGLE_PLAY) {
+          setPlay(play => !play)
+        } else if (remoteCommand.commandType === RemoteCommandType.TO_TOP) {
+          scrollToTop()
+        }
+      })
+      onCleanup(() => events.close())
+    }
+  })
 
   onMount(() => {
     scrollToTop()
@@ -94,19 +112,6 @@ export default function View() {
           advanceScroll()
           return false
       }
-    }
-
-    if (settings.connectCode) {
-      let events = new EventSource(`/api/prompter/${settings.connectCode}/connect`)
-      events.addEventListener("message", ({ data }) => {
-        let remoteCommand: RemoteCommand = JSON.parse(data)
-        if (remoteCommand.commandType === RemoteCommandType.TOGGLE_PLAY) {
-          setPlay(play => !play)
-        } else if (remoteCommand.commandType === RemoteCommandType.TO_TOP) {
-          scrollToTop()
-        }
-      })
-      onCleanup(() => events.close())
     }
 
     function onScroll() {
@@ -157,7 +162,7 @@ export default function View() {
               <Icon name="play" />
             </Show>
           </label>
-          <Show when={settings.connectCode}>
+          <Show when={settings.connectCode && isRemoteAvailable()}>
             <button onClick={() => setShareModalOpen(true)} class="btn">
               <Icon name="cast" />
             </button>

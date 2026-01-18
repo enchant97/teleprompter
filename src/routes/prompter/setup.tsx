@@ -1,11 +1,14 @@
+import { createAsync } from "@solidjs/router"
 import { Show, createSignal } from "solid-js"
 import { Portal } from "solid-js/web"
 import { ShareModal } from "~/components/modals"
+import { isRedisAvailable } from "~/core/redis"
 import createSettingsStore from "~/core/settings"
 
 export default function Setup() {
   const [shareModalOpen, setShareModalOpen] = createSignal(false)
   const [settings, setSettings, { save, clear, load }] = createSettingsStore()
+  const isRemoteAvailable = createAsync(isRedisAvailable)
 
   const clearSettings = () => {
     const script = settings.script
@@ -195,38 +198,40 @@ export default function Setup() {
             <span>{settings.overlayBottom}%</span>
           </div>
         </label>
-        <div class="form-control">
-          <span class="label-text">Connect Code (For Remotes)</span>
-          <div class="flex gap-1 items-center">
-            <code class="flex-1">{settings.connectCode || "__DISABLED__"}</code>
-            <Show when={settings.connectCode} fallback={
-              <Show when={isSecureContext}>
+        <Show when={isRemoteAvailable()} fallback={<></>}>
+          <div class="form-control">
+            <span class="label-text">Connect Code (For Remotes)</span>
+            <div class="flex gap-1 items-center">
+              <code class="flex-1">{settings.connectCode || "__DISABLED__"}</code>
+              <Show when={settings.connectCode} fallback={
+                <Show when={isSecureContext}>
+                  <button
+                    onClick={() => setSettings({ connectCode: crypto.randomUUID() })}
+                    class="btn"
+                  >
+                    Generate
+                  </button>
+                </Show>
+              }>
                 <button
-                  onClick={() => setSettings({ connectCode: crypto.randomUUID() })}
+                  onClick={() => setShareModalOpen(true)}
                   class="btn"
                 >
-                  Generate
+                  Share
+                </button>
+                <button
+                  onClick={() => setSettings({ connectCode: undefined })}
+                  class="btn error"
+                >
+                  Disable
                 </button>
               </Show>
-            }>
-              <button
-                onClick={() => setShareModalOpen(true)}
-                class="btn"
-              >
-                Share
-              </button>
-              <button
-                onClick={() => setSettings({ connectCode: undefined })}
-                class="btn error"
-              >
-                Disable
-              </button>
-            </Show>
+            </div>
           </div>
-        </div>
+        </Show>
         <button class="btn primary" type="submit">Save</button>
         <button onClick={clearSettings} class="btn error" type="button">Clear</button>
-      </form>
+      </form >
     </>
   )
 }
