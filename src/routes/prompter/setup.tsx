@@ -8,8 +8,11 @@ export default function Setup() {
   const [settings, setSettings, { save, clear, load }] = createSettingsStore()
 
   const clearSettings = () => {
+    const script = settings.script
     clear()
     load()
+    setSettings({ script })
+    save()
   }
 
   return (
@@ -221,15 +224,6 @@ export default function Setup() {
             </Show>
           </div>
         </div>
-        <label class="form-control">
-          <span class="label-text">Script</span>
-          <textarea
-            onInput={(ev) => setSettings({ script: ev.currentTarget.value })}
-            class="input"
-            rows={10}
-            required
-          >{settings.script}</textarea>
-        </label>
         <button class="btn primary" type="submit">Save</button>
         <button onClick={clearSettings} class="btn error" type="button">Clear</button>
       </form>
