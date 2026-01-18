@@ -43,7 +43,7 @@ export default function Setup() {
         <textarea
           onInput={(ev) => setSettings({ script: ev.currentTarget.value })}
           class="input"
-          rows={10}
+          rows={15}
           required
         >{settings.script}</textarea>
       </label>

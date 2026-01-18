@@ -11,13 +11,15 @@
   "dependencies": {
     "@solidjs/router": "^0.15.4",
     "@solidjs/start": "^1.2.1",
+    "@tailwindcss/vite": "^4.1.18",
+    "dompurify": "^3.3.1",
     "feather-icons": "^4.29.2",
+    "marked": "^17.0.1",
     "qrcode": "^1.5.4",
     "redis": "^4.7.1",
     "solid-js": "^1.9.10",
-    "vinxi": "^0.5.10",
-    "@tailwindcss/vite": "^4.1.18",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "vinxi": "^0.5.10"
   },
   "devDependencies": {
     "@types/bun": "^1.3.6",

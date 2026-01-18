@@ -88,4 +88,33 @@
   .modal::backdrop {
     @apply backdrop-blur;
   }
+
+  .script-container {
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      @apply font-black;
+      font-size: inherit;
+    }
+
+    ul,
+    ol {
+      @apply p-0 m-0 list-outside;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    li,
+    p {
+      @apply py-2;
+    }
+  }
 }

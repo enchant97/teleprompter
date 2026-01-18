@@ -1,9 +1,11 @@
-import { For, Show, createSignal, onCleanup, onMount } from "solid-js"
+import { Show, createResource, createSignal, onCleanup, onMount } from "solid-js"
 import { Portal } from "solid-js/web";
+import DOMPurify from 'dompurify';
 import Icon from "~/components/icon";
 import { ShareModal } from "~/components/modals";
 import createSettingsStore from "~/core/settings"
 import { RemoteCommand, RemoteCommandType } from "~/core/types";
+import { marked } from "marked";
 
 function smartScroll(element: HTMLElement, amount: number, reverse: boolean): { end: boolean } {
   let currentScroll = element.scrollTop;
@@ -32,6 +34,14 @@ export default function View() {
     scrollHeight: 0,
     clientHeight: 0,
   })
+  const [renderedScript] = createResource(settings.script, async (script) => {
+    const unsafeRendered = await marked.parse(script, {
+      async: true,
+      breaks: true,
+      gfm: true,
+    })
+    return DOMPurify.sanitize(unsafeRendered)
+  })
 
   const scrollPercent = () => {
     const perc = Math.round((currentScroll().scrollTop / (currentScroll().scrollHeight - currentScroll().clientHeight)) * 100) || 0
@@ -40,8 +50,6 @@ export default function View() {
     }
     return perc
   }
-
-  const scriptLines = () => settings.script.split("\n\n")
 
   const scriptStyle = () => `
     color: ${settings.textColor};
@@ -167,15 +175,13 @@ export default function View() {
         </div>
         <hr class="mt-[90vh]" />
         <div
-          class="mt-12 mx-auto"
+          class="mt-12 mx-auto script-container"
           classList={{
             "transform-[scale(1,-1)]": settings.mirror,
           }}
           style={`max-width:${settings.maxWidth}px`}
+          innerHTML={renderedScript()}
         >
-          <For each={scriptLines()}>
-            {line => <p>{line}</p>}
-          </For>
         </div>
         <hr class="mb-[90vh]" />
       </div>
