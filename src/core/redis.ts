@@ -42,6 +42,6 @@ export async function subscribeForCommands(clientUid: string, onCommand: (c: Rem
   })
   abortSignal.addEventListener("abort", async () => {
     await client.unsubscribe(`commands:${clientUid}`)
-    await client.disconnect()
+    client.destroy()
   })
 }
