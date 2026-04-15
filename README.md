@@ -3,7 +3,7 @@ Teleprompter is a customisable web app allowing users to read off their script.
 
 > Currently a WIP, use at your own risk
 
-As seen on: [@enchantedcode](https://www.youtube.com/@enchantedcode).
+As seen on: [Leo Plus Tech](https://www.youtube.com/@enchantedcode) YouTube channel.
 
 ## Features
 - Customisable prompter view
@@ -24,6 +24,10 @@ As seen on: [@enchantedcode](https://www.youtube.com/@enchantedcode).
 - Error handling
 - synchronisation of multiple prompters
 - Complete remote control functionality
+
+## Known Issues
+- Scrolling with arrow keys may not work until pressing in center of prompter viewport
+- Auto-Scroll may not work on mobile devices
 
 ## License
 This project is Copyright (c) 2026 Leo Spratt, licences shown below:

@@ -5,7 +5,7 @@ import { isRedisAvailable } from "~/core/redis"
 export default function Help() {
   const isRemoteAvailable = createAsync(isRedisAvailable)
   return (
-    <div class="max-w-screen-md">
+    <div class="max-w-3xl">
       <h1>Help</h1>
       <section>
         <h2>Prompter</h2>
@@ -17,6 +17,11 @@ export default function Help() {
         <ul>
           <li><code>{"<s>"}</code> Toggle Scroll</li>
           <li><code>{"<a>"}</code> Advance Scroll</li>
+        </ul>
+        <h3>Known Issues</h3>
+        <ul>
+          <li>Scrolling with arrow keys may not work until pressing in center of prompter viewport</li>
+          <li>Auto-Scroll may not work on mobile devices</li>
         </ul>
       </section>
       <Show when={isRemoteAvailable()} fallback={<></>}>
