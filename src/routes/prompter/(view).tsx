@@ -36,6 +36,8 @@ export default function View() {
     scrollHeight: 0,
     clientHeight: 0,
   })
+  const [fullscreenPossible, setFullscreenPossible] = createSignal(document.fullscreenEnabled)
+  const [isFullscreen, setIsFullscreen] = createSignal(document.fullscreenElement !== null)
   const [renderedScript] = createResource(settings.script, async (script) => {
     const unsafeRendered = await marked.parse(script, {
       async: true,
@@ -66,6 +68,18 @@ export default function View() {
       scriptContainer.scroll({ top: scriptContainer.scrollHeight })
     } else {
       scriptContainer.scroll({ top: 0 })
+    }
+  }
+
+  function toggleFullscreen() {
+    if (document.fullscreenElement === null) {
+      document.body.requestFullscreen({ navigationUI: "hide" }).then(() => {
+        setIsFullscreen(true)
+      }).catch(() => setFullscreenPossible(false))
+    } else {
+      document.exitFullscreen().then(() => {
+        setIsFullscreen(false)
+      }).catch(() => { setFullscreenPossible(false) })
     }
   }
 
@@ -122,14 +136,20 @@ export default function View() {
       })
     }
 
+    const onFullscreenChange = () => {
+      setIsFullscreen(document.fullscreenElement !== null)
+    }
+
     scriptContainer.addEventListener("scroll", onScroll)
     document.addEventListener("keydown", keyDownTextField, false)
+    document.addEventListener("fullscreenchange", onFullscreenChange)
 
     let scroller = setInterval(autoScroll, speed);
 
     onCleanup(() => {
       document.removeEventListener("keydown", keyDownTextField, false)
       scriptContainer.removeEventListener("scroll", onScroll)
+      document.removeEventListener("fullscreenchange", onFullscreenChange)
       clearInterval(scroller)
     })
   })
@@ -162,6 +182,13 @@ export default function View() {
               <Icon name="play" />
             </Show>
           </label>
+          <Show when={fullscreenPossible()}>
+            <button onClick={() => { toggleFullscreen() }} class="btn">
+              <Show when={isFullscreen()} fallback={<Icon name="maximize" />}>
+                <Icon name="minimize" />
+              </Show>
+            </button>
+          </Show>
           <Show when={settings.connectCode && isRemoteAvailable()}>
             <button onClick={() => setShareModalOpen(true)} class="btn">
               <Icon name="cast" />
